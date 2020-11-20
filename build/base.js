@@ -13,7 +13,7 @@ const path = require("path");
 
 module.exports = {
   // entrys 目录下作为 index.html 的那个模块
-  projectEntry: "about",
+  projectEntry: undefined,
   // modules 目录下要参与编译的模块
   modules: {
     include: "all",

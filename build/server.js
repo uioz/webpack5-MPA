@@ -20,7 +20,7 @@ const {
   projectEntry,
 } = require("./base");
 const app = express();
-const modulesPrefix = modules.map((item) => `/${item}`);
+const modulesPrefix = modules.map(item => `/${item}`);
 
 async function main() {
   await initDev();
@@ -67,9 +67,11 @@ async function main() {
     return next();
   });
 
-  app.use(
-    history(require(resolve(srcPath, "entrys", projectEntry, "fallback.js")))
-  );
+  if (projectEntry) {
+    app.use(
+      history(require(resolve(srcPath, "entrys", projectEntry, "fallback.js")))
+    );
+  }
 
   app.use(
     compilerMiddleware(compiler, {

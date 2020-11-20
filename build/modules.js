@@ -1,6 +1,7 @@
 const base = require("./base");
 const fs = require("fs");
 const path = require("path");
+const { buildToolDebug } = require("./debug");
 
 const modulesPath = path.resolve(base.contextPath, "./src/modules");
 const entrysPath = path.resolve(base.contextPath, "./src/entrys");
@@ -9,14 +10,16 @@ const modules = fs.readdirSync(modulesPath);
 const entrys = fs.readdirSync(entrysPath);
 const pages = fs.readdirSync(pagesPath);
 
-if (!base.projectEntry) {
-  throw new Error(
+if (base.projectEntry) {
+  if (entrys.indexOf(base.projectEntry) == -1) {
+    throw new Error(
+      `The entrys dir doesn't have a module named ${projectEntry}`
+    );
+  }
+} else {
+  buildToolDebug(
     "the projectEntry which in base.js needs a value for config of entry in webpack.config.js!"
   );
-}
-
-if (entrys.indexOf(base.projectEntry) == -1) {
-  throw new Error(`The entrys dir doesn't have a module named ${projectEntry}`);
 }
 
 function excludes(target, exclude) {
@@ -28,7 +31,7 @@ function excludes(target, exclude) {
     return target;
   }
 
-  return target.filter((item) => !exclude.includes(item));
+  return target.filter(item => !exclude.includes(item));
 }
 
 function filter(target, option) {
@@ -43,7 +46,7 @@ function filter(target, option) {
   return Array.from(
     new Set(
       target
-        .filter((item) => option.include.includes(item))
+        .filter(item => option.include.includes(item))
         .concat(excludes(target, option.exclude))
     )
   );

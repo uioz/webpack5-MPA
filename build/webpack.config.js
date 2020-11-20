@@ -73,7 +73,7 @@ const baseConfig = {
   ],
 };
 
-module.exports = async (env) => {
+module.exports = async env => {
   process.env.NODE_ENV = baseConfig.mode = env.NODE_ENV;
 
   if (env.NODE_ENV === PROD_FLAG) {
@@ -96,7 +96,7 @@ module.exports = async (env) => {
       include: path.resolve(contextPath, "src"),
       // see https://vue-loader.vuejs.org/guide/pre-processors.html#excluding-node-modules
       // see https://github.com/babel/babel-loader#some-files-in-my-node_modules-are-not-transpiled-for-ie-11
-      exclude: (file) => /node_modules/.test(file) && !/\.vue\.js/.test(file),
+      exclude: file => /node_modules/.test(file) && !/\.vue\.js/.test(file),
     });
     ThreadLoader.warmup(
       {
@@ -162,7 +162,9 @@ module.exports = async (env) => {
     addPage(moduleName);
   }
 
-  addPage(projectEntry, true);
+  if (projectEntry) {
+    addPage(projectEntry, true);
+  }
 
   buildToolDebug("moudles and entry name: ", ...Object.keys(baseConfig.entry));
 
