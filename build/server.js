@@ -1,5 +1,5 @@
 process.env.NODE_ENV = process.argv[2];
-const { resolve } = require("path");
+const { join } = require("path");
 const express = require("express");
 const compilerMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
@@ -21,6 +21,7 @@ const {
 } = require("./base");
 const app = express();
 const modulesPrefix = modules.map(item => `/${item}`);
+const pageUrl = pages.map(page => `/${page}`);
 
 async function main() {
   await initDev();
@@ -43,11 +44,11 @@ async function main() {
     }
 
     // 响应 pages
-    if (pages.includes(request.url)) {
+    if (pageUrl.includes(request.url)) {
       buildToolDebug(`URL ${request.url} handled by page`);
       response.statusCode = 200;
       response.setHeader("Content-Type", "text/html");
-      response.sendFile(resolve(srcPath, "./pages", request.url));
+      response.sendFile(join(srcPath, "./pages", request.url.substring()));
       return;
     }
 
