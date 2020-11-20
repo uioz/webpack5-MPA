@@ -8,7 +8,7 @@ const history = require("connect-history-api-fallback");
 const createCompiler = require("./compiler");
 const { modules, pages } = require("./modules");
 const { initDev } = require("./init");
-const { buildToolDebug } = require("./debug");
+const { serverDebug } = require("./debug");
 
 const {
   devPort,
@@ -37,16 +37,16 @@ async function main() {
   }
 
   app.get("*", (request, response, next) => {
-    buildToolDebug(`GET ${request.url}`);
+    serverDebug(`GET ${request.url}`);
     // 如果地址基于静态地址则跳过
     if ((request.url + "/").indexOf(staticPublicPath + "/") === 0) {
-      buildToolDebug(`URL ${request.url} handled by static`);
+      serverDebug(`URL ${request.url} handled by static`);
       return next();
     }
 
     // 响应 pages
     if (pageUrl.includes(request.url)) {
-      buildToolDebug(`URL ${request.url} handled by page`);
+      serverDebug(`URL ${request.url} handled by page`);
       response.statusCode = 200;
       response.setHeader("Content-Type", "text/html");
       response.sendFile(join(srcPath, "./pages", request.url.substring()));
@@ -61,7 +61,7 @@ async function main() {
       // /helloword + '/' === '/helloword/ match /hello/ == false
       if ((request.url + "/").indexOf(prefix + "/") === 0) {
         request.url = `${prefix}.html`;
-        buildToolDebug(`URL ${request.url} handled by module`);
+        serverDebug(`URL ${request.url} handled by module`);
         return next();
       }
     }
@@ -98,9 +98,9 @@ async function main() {
   app.use(staticPublicPath, express.static(staticPath));
 
   app.listen(devPort, devHost, () => {
-    buildToolDebug("---------------------------");
-    buildToolDebug(`server running in ${devHost}:${devPort}`);
-    buildToolDebug("---------------------------");
+    serverDebug("---------------------------");
+    serverDebug(`server running in ${devHost}:${devPort}`);
+    serverDebug("---------------------------");
   });
 }
 

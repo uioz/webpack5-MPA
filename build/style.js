@@ -2,8 +2,6 @@ const Fiber = require("fibers");
 const miniCssExtractPlugin = require("mini-css-extract-plugin");
 const { staticPath, publicPath } = require("./base");
 
-// TODO: 细微调整 thread-loader 找出最平衡的配置
-
 exports.handleDevStyle = function handleDevStyle() {
   return {
     test: /\.((c|sc)ss)$/i,
@@ -26,7 +24,6 @@ exports.handleDevStyle = function handleDevStyle() {
           esModule: false,
         },
       },
-      "thread-loader",
       {
         loader: "sass-loader",
         options: {
@@ -52,6 +49,7 @@ exports.handleProdStyle = function handleProdStyle() {
             esModule: false,
           },
         },
+        "thread-loader",
         {
           loader: "css-loader",
           options: {
@@ -68,9 +66,7 @@ exports.handleProdStyle = function handleProdStyle() {
             esModule: false,
           },
         },
-        "thread-loader",
         "postcss-loader",
-        "thread-loader",
         {
           loader: "sass-loader",
           options: {

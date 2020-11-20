@@ -50,6 +50,7 @@ npm run clean
 
 - index.js 作为 webpack 打包的入口
 - index.html 作为注入 chunk 的模板
+  - index.html head 标签尾需要添加 `<%= htmlWebpackPlugin.options.headScripts %>`
 - fallback.js 本质是 connect-api-fallback 的选项配置, 在开发服务器运行时通过该配置, 决定哪些地址响应 `index.html`
 
 仅有这三个文件是不能够满足项目的运行, 的一般来说还需要路由文件和 vue 文件, 建议的目录格式如下:

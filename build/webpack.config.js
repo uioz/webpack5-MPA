@@ -45,7 +45,7 @@ const baseConfig = {
     rules: [
       {
         test: /\.vue$/i,
-        include: path.resolve(contextPath, "./src"),
+        include: [path.resolve(contextPath, "./src"), /vue-echarts/],
         use: ["thread-loader", "vue-loader"],
       },
       {
@@ -102,7 +102,7 @@ module.exports = async env => {
       {
         poolRespawn: true,
       },
-      ["vue-loader", "sass-loader", "thread-loader", "postcss-loader"]
+      ["vue-loader", "babel-loader"]
     );
   }
 
@@ -131,7 +131,7 @@ module.exports = async env => {
       {
         poolRespawn: false,
       },
-      ["vue-loader", "sass-loader", "postcss-loader"]
+      ["vue-loader", "css-loader"]
     );
   }
 

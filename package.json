@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "node ./build/server.js development",
+    "dev:verbose": "node ./build/server.js development verbose",
     "build": "webpack -c ./build/webpack.config.js --env NODE_ENV=production",
     "build:vendor": "webpack -c ./build/webpack.vendor.js",
     "build:analysis": "npm run build -- --analyze",
