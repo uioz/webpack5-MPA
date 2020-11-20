@@ -13,6 +13,13 @@ exports.handleDevStyle = function handleDevStyle() {
       {
         loader: "css-loader",
         options: {
+          // don't handled url started with /static
+          url(url) {
+            if (`${url}/`.indexOf(`${staticPath}/` === 0)) {
+              return false;
+            }
+            return true;
+          },
           importLoaders: 1,
           modules: false,
           // see https://github.com/vuejs/vue-loader/issues/1709#issuecomment-674390048
@@ -48,6 +55,13 @@ exports.handleProdStyle = function handleProdStyle() {
         {
           loader: "css-loader",
           options: {
+            // don't handled url started with /static
+            url(url) {
+              if (`${url}/`.indexOf(`${staticPath}/` === 0)) {
+                return false;
+              }
+              return true;
+            },
             importLoaders: 2,
             modules: false,
             // see https://github.com/vuejs/vue-loader/issues/1709#issuecomment-674390048

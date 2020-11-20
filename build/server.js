@@ -1,14 +1,15 @@
 process.env.NODE_ENV = process.argv[2];
-const { join } = require("path");
+const { join, resolve } = require("path");
 const express = require("express");
 const compilerMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
-const httpProxyMiddleware = require("http-proxy-middleware");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 const history = require("connect-history-api-fallback");
 const createCompiler = require("./compiler");
 const { modules, pages } = require("./modules");
 const { initDev } = require("./init");
 const { buildToolDebug } = require("./debug");
+
 const {
   devPort,
   staticPath,
@@ -32,7 +33,7 @@ async function main() {
   // 当获取模块地址的时候就变成了代理请求
   // 这个必须处理
   for (const [context, options] of Object.entries(proxyTable)) {
-    app.use(httpProxyMiddleware(context, options));
+    app.use(createProxyMiddleware(context, options));
   }
 
   app.get("*", (request, response, next) => {
