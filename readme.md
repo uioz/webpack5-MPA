@@ -113,6 +113,7 @@ entrys 和 modules 下存放的都是用于 SPA 的入口模块, 对于页面组
   - [x] mini-css
 - [x] copy statics
 - [x] proxyTable
+- [ ] 将 pages 中的依赖模块也纳入到 webpack 中解析
 - [ ] 拆分优化
   - [ ] css 拆分
 - [ ] 使用 debug
