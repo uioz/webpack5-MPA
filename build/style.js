@@ -49,7 +49,6 @@ exports.handleProdStyle = function handleProdStyle() {
             esModule: false,
           },
         },
-        "thread-loader",
         {
           loader: "css-loader",
           options: {

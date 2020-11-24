@@ -36,8 +36,26 @@ async function main() {
     app.use(createProxyMiddleware(context, options));
   }
 
+  const rewrites = [];
+
+  if (projectEntry) {
+    try {
+      rewrites.push(
+        ...require(resolve(srcPath, "entrys", projectEntry, "fallback.js"))
+          .rewrites
+      );
+    } catch (error) {}
+  }
+
+  for (const module of modules) {
+    try {
+      rewrites.push(
+        ...require(resolve(srcPath, "modules", module, "fallback.js")).rewrites
+      );
+    } catch (error) {}
+  }
+
   app.get("*", (request, response, next) => {
-    serverDebug(`GET ${request.url}`);
     // 如果地址基于静态地址则跳过
     if ((request.url + "/").indexOf(staticPublicPath + "/") === 0) {
       serverDebug(`URL ${request.url} handled by static`);
@@ -69,11 +87,13 @@ async function main() {
     return next();
   });
 
-  if (projectEntry) {
-    app.use(
-      history(require(resolve(srcPath, "entrys", projectEntry, "fallback.js")))
-    );
-  }
+  // 匹配基于 fallback 的地址
+  app.use(
+    history({
+      rewrites,
+      logger: serverDebug,
+    })
+  );
 
   app.use(
     compilerMiddleware(compiler, {
