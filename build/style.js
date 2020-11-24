@@ -1,6 +1,6 @@
 const Fiber = require("fibers");
 const miniCssExtractPlugin = require("mini-css-extract-plugin");
-const { staticPath, publicPath } = require("./base");
+const { staticPublicPath, staticPath, publicPath } = require("./base");
 
 exports.handleDevStyle = function handleDevStyle() {
   return {
@@ -13,7 +13,7 @@ exports.handleDevStyle = function handleDevStyle() {
         options: {
           // don't handled url started with /static
           url(url) {
-            if (`${url}/`.indexOf(`${staticPath}/` === 0)) {
+            if (`${url}/`.indexOf(`${staticPublicPath}/`) === 0) {
               return false;
             }
             return true;

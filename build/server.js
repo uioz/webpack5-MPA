@@ -104,7 +104,7 @@ async function main() {
 
   app.use(
     webpackHotMiddleware(compiler, {
-      log: false,
+      log: serverDebug,
     })
   );
 

@@ -6,6 +6,12 @@
 npm run dev
 ```
 
+启动开发服务器(输出详情到控制台):
+
+```
+npm run dev:verbose
+```
+
 打包:
 
 ```
