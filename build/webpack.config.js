@@ -98,12 +98,7 @@ module.exports = async env => {
       // see https://github.com/babel/babel-loader#some-files-in-my-node_modules-are-not-transpiled-for-ie-11
       exclude: file => /node_modules/.test(file) && !/\.vue\.js/.test(file),
     });
-    ThreadLoader.warmup(
-      {
-        poolRespawn: true,
-      },
-      ["vue-loader", "babel-loader"]
-    );
+    ThreadLoader.warmup({}, ["babel-loader", "vue-loader"]);
   }
 
   if (env.NODE_ENV === DEV_FLAG) {
@@ -127,12 +122,7 @@ module.exports = async env => {
         ),
       })
     );
-    ThreadLoader.warmup(
-      {
-        poolRespawn: false,
-      },
-      ["vue-loader", "css-loader"]
-    );
+    ThreadLoader.warmup({}, ["vue-loader"]);
   }
 
   function addPage(moduleName, index) {
