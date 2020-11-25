@@ -54,7 +54,7 @@ exports.handleProdStyle = function handleProdStyle() {
           options: {
             // don't handled url started with /static
             url(url) {
-              if (`${url}/`.indexOf(`${staticPath}/` === 0)) {
+              if (`${url}/`.indexOf(`${staticPublicPath}/`) === 0) {
                 return false;
               }
               return true;
@@ -79,7 +79,7 @@ exports.handleProdStyle = function handleProdStyle() {
     plugin: new miniCssExtractPlugin({
       filename: "[name].[contenthash].css",
       chunkFilename: "chunk.[contenthash].css",
-      ignoreOrder: false, // Enable to remove warnings about conflicting order
+      ignoreOrder: true, // Disabled to remove warnings about conflicting order
     }),
   };
 };
