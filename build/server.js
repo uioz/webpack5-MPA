@@ -1,6 +1,7 @@
 process.env.NODE_ENV = process.argv[2];
 const { join, resolve } = require("path");
 const express = require("express");
+const fsExtra = require("fs-extra");
 const compilerMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
 const { createProxyMiddleware } = require("http-proxy-middleware");
@@ -20,8 +21,11 @@ const {
     proxyTable,
     srcPath,
     projectEntry,
+    contextPath,
   },
+  runtimeConfig,
 } = require("./init");
+
 const app = express();
 const modulesPrefix = modules.map(item => `/${item}`);
 const pageUrl = pages.map(page => `/${page}`);
@@ -61,6 +65,23 @@ async function main() {
     // 如果地址基于静态地址则跳过
     if ((request.url + "/").indexOf(staticPublicPath + "/") === 0) {
       serverDebug(`URL ${request.url} handled by static`);
+      // 处理 local.config.js
+      if (runtimeConfig && request.url === `${staticPublicPath}/js/config.js`) {
+        response.setHeader(
+          "content-type",
+          "application/javascript; charset=UTF-8"
+        );
+        fsExtra.readFile(
+          join(contextPath, "local.config.js"),
+          (error, data) => {
+            if (error) {
+              return serverDebug(error);
+            }
+            response.status(200).send(data);
+          }
+        );
+        return;
+      }
       return next();
     }
 
@@ -111,10 +132,6 @@ async function main() {
   );
 
   // 假设 API 请求地址和静态资源请求不重名
-  // publicPath || "*" ->
-  // '' || "*" = '*'
-  // undefined || "*" = '*'
-  // app.use(publicPath || "*", express.static(staticPublicPath, staticPath));
   // TODO: 考虑设置 publicPath 的时候前端代理是否也要结合 publicPath
   // 另外像 /static 是否应该成为 /<publicPath>/static
   app.use(staticPublicPath, express.static(staticPath));

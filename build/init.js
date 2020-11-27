@@ -12,8 +12,13 @@ const { staticPath, distPath, srcPath } = base;
 
 exports.base = base;
 
+exports.runtimeConfig = fsExtra.existsSync(
+  path.resolve(base.contextPath, "local.config.js")
+);
+
 const vendorConfig = require("./webpack.vendor");
 const { devDebug, prodDebug } = require("./debug");
+const { contextPath } = require("./base");
 const DEV_FLAG = "development";
 const PROD_FLAG = "production";
 
@@ -52,24 +57,27 @@ exports.initProd = async function initProd(pages) {
   prodDebug("empty distribution folder - done");
 
   const tasks = [
-    new Promise((resolve, reject) => {
+    (async () => {
       prodDebug("copying static folder to distribution folder - start");
-      fsExtra
-        .copy(staticPath, path.resolve(distPath, "./static"), {
-          filter(src) {
-            /**
-             * fsExtra 是递归执行, 如果 /static/vendor 返回 false 则 /static/vendor/xxx 将不会进行查询
-             * src.lastIndexOf("vendor") + 6 的目的是求出以 vendor 结尾的目录然后屏蔽它
-             */
-            return src.lastIndexOf("vendor") + 6 != src.length;
-          },
-        })
-        .then(() => {
-          prodDebug("copying static folder to distribution folder - done");
-          resolve();
-        })
-        .catch(reject);
-    }),
+      await fsExtra.copy(staticPath, path.resolve(distPath, "./static"), {
+        filter(src) {
+          /**
+           * fsExtra 是递归执行, 如果 /static/vendor 返回 false 则 /static/vendor/xxx 将不会进行查询
+           * src.lastIndexOf("vendor") + 6 的目的是求出以 vendor 结尾的目录然后屏蔽它
+           */
+          return src.lastIndexOf("vendor") + 6 != src.length;
+        },
+      });
+
+      if (exports.runtimeConfig) {
+        await fsExtra.copy(
+          path.resolve(contextPath, "local.config.js"),
+          path.resolve(distPath, "./static/js/config.js")
+        );
+      }
+
+      prodDebug("copying static folder to distribution folder - done");
+    })(),
   ];
 
   for (const page of pages) {
