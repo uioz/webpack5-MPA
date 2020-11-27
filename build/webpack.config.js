@@ -158,7 +158,11 @@ module.exports = async env => {
     addPage(projectEntry, true);
   }
 
-  buildToolDebug("moudles and entry name: ", ...Object.keys(baseConfig.entry));
+  buildToolDebug(
+    "moudles and entry name: ",
+    ...modules,
+    projectEntry && `${projectEntry} as index`
+  );
 
   return baseConfig;
 };
