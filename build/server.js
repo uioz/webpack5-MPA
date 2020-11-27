@@ -27,8 +27,8 @@ const {
 } = require("./init");
 
 const app = express();
-const modulesPrefix = modules.map(item => `/${item}`);
-const pageUrl = pages.map(page => `/${page}`);
+const modulesPrefix = modules.map((item) => `/${item}`);
+const pageUrl = pages.map((page) => `/${page}`);
 
 async function main() {
   await initDev();
@@ -100,7 +100,7 @@ async function main() {
       // /hello/world + '/' === /hello/world/ match /hello/ == true
       // /hello/world/ + '/' === /hello/world// match /hello/ == true
       // /helloword + '/' === '/helloword/ match /hello/ == false
-      if ((request.url + "/").indexOf(prefix + "/") === 0) {
+      if ((request.path + "/").indexOf(prefix + "/") === 0) {
         request.url = `${prefix}.html`;
         serverDebug(`URL ${request.url} handled by module`);
         return next();
