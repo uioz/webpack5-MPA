@@ -1,6 +1,8 @@
 const Fiber = require("fibers");
 const miniCssExtractPlugin = require("mini-css-extract-plugin");
-const { staticPublicPath, staticPath, publicPath } = require("./base");
+const {
+  base: { staticPublicPath, staticPath, publicPath },
+} = require("./init");
 
 exports.handleDevStyle = function handleDevStyle() {
   return {

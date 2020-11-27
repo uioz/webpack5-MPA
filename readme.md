@@ -105,6 +105,20 @@ entrys 和 modules 下存放的都是用于 SPA 的入口模块, 对于页面组
 
 如果在使用 import 语句进行导入将无法通过编译.
 
+# 本地配置
+
+项目根路径支持两个特殊文件:
+- local.base.js
+- local.config.js
+
+这两个特殊文件会被 git 忽略掉, 但是一旦你提供它, 他的优先级会高于默认的:
+- build/base.js
+- config.js
+
+添加这两个文件的目的是, 为了避免从服务器拉取代码时候他人修改了这两个文件, 导致本地频繁的改动.
+
+`local.base.js` 会覆盖默认的 `base.js` 中的同名配置. 而 `local.config.js` 将会直接替换 `static/js/config.js`.
+
 # TODO LIST
 
 - [x] 启动 Vue

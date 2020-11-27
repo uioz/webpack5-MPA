@@ -1,4 +1,4 @@
-const base = require("./base");
+const { base } = require("./init");
 const fs = require("fs");
 const path = require("path");
 const { buildToolDebug } = require("./debug");

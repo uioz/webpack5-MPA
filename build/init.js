@@ -1,7 +1,17 @@
 const path = require("path");
 const fsExtra = require("fs-extra");
+const merge = require("lodash.merge");
 const webpack = require("webpack");
-const { staticPath, distPath, srcPath } = require("./base");
+
+let base = require("./base");
+try {
+  base = merge(base, require(path.join(__dirname, "..", "local.base.js")));
+} catch {}
+
+const { staticPath, distPath, srcPath } = base;
+
+exports.base = base;
+
 const vendorConfig = require("./webpack.vendor");
 const { devDebug, prodDebug } = require("./debug");
 const DEV_FLAG = "development";

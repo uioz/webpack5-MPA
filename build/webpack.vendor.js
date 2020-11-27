@@ -1,13 +1,15 @@
 const path = require("path");
 const { DllPlugin } = require("webpack");
-const { contextPath } = require("./base");
+const {
+  base: { contextPath },
+} = require("./init");
 
 module.exports = {
   mode: "development",
   devtool: "source-map",
   context: contextPath,
   entry: {
-    vendor: ["lodash", "vue", "vuex", "vue-router"],
+    vendor: ["lodash", "vue", "vuex", "vue-router", "element-ui", "axios"],
   },
   output: {
     filename: "vendor.bundle.js",

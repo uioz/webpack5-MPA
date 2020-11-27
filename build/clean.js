@@ -1,6 +1,8 @@
 const fsExtra = require("fs-extra");
 const { resolve } = require("path");
-const { distPath, staticPath, contextPath } = require("./base");
+const {
+  base: { distPath, staticPath, contextPath },
+} = require("./init");
 const { buildToolDebug } = require("./debug");
 
 async function main() {

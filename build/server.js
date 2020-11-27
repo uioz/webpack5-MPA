@@ -11,15 +11,17 @@ const { initDev } = require("./init");
 const { serverDebug } = require("./debug");
 
 const {
-  devPort,
-  staticPath,
-  staticPublicPath,
-  devHost,
-  publicPath,
-  proxyTable,
-  srcPath,
-  projectEntry,
-} = require("./base");
+  base: {
+    devPort,
+    staticPath,
+    staticPublicPath,
+    devHost,
+    publicPath,
+    proxyTable,
+    srcPath,
+    projectEntry,
+  },
+} = require("./init");
 const app = express();
 const modulesPrefix = modules.map(item => `/${item}`);
 const pageUrl = pages.map(page => `/${page}`);

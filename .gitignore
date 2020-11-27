@@ -16,3 +16,6 @@ node_modules/
 /dist
 .cache
 /static/vendor
+
+/local.base.js
+/local.config.js
