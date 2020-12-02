@@ -86,11 +86,11 @@ async function main() {
     }
 
     // 响应 pages
-    if (pageUrl.includes(request.url)) {
+    if (pageUrl.includes(request.path)) {
       serverDebug(`URL ${request.url} handled by page`);
       response.statusCode = 200;
       response.setHeader("Content-Type", "text/html");
-      response.sendFile(join(srcPath, "./pages", request.url.substring()));
+      response.sendFile(join(srcPath, "./pages", request.path));
       return;
     }
 
