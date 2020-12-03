@@ -11,7 +11,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const ThreadLoader = require("thread-loader");
 const { initProd } = require("./init");
-const { DllReferencePlugin } = require("webpack");
+const { DllReferencePlugin, DefinePlugin } = require("webpack");
 const { handleDevStyle, handleProdStyle } = require("./style");
 const { buildToolDebug } = require("./debug");
 
@@ -156,6 +156,11 @@ module.exports = async env => {
 
   if (projectEntry) {
     addPage(projectEntry, true);
+    baseConfig.plugins.push(
+      new DefinePlugin({
+        "process.env.entry": JSON.stringify(projectEntry),
+      })
+    );
   }
 
   buildToolDebug(
