@@ -9,7 +9,7 @@ module.exports = {
   devtool: "source-map",
   context: contextPath,
   entry: {
-    vendor: ["lodash", "vue", "vuex", "vue-router", "element-ui", "axios"],
+    vendor: ["lodash", "vue", "vuex", "vue-router"],
   },
   output: {
     filename: "vendor.bundle.js",
