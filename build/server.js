@@ -9,7 +9,7 @@ const history = require("connect-history-api-fallback");
 const createCompiler = require("./compiler");
 const { modules, pages } = require("./modules");
 const { initDev } = require("./init");
-const { serverDebug } = require("./debug");
+const { serverDebug, prodDebug } = require("./debug");
 
 const {
   base: {
@@ -137,9 +137,9 @@ async function main() {
   app.use(staticPublicPath, express.static(staticPath));
 
   app.listen(devPort, devHost, () => {
-    serverDebug("---------------------------");
-    serverDebug(`server running in ${devHost}:${devPort}`);
-    serverDebug("---------------------------");
+    prodDebug("---------------------------");
+    prodDebug(`server running in ${devHost}:${devPort}`);
+    prodDebug("---------------------------");
   });
 }
 
