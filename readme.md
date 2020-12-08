@@ -30,6 +30,19 @@ npm run build:analysis
 npm run build:vendor
 ```
 
+在构建模式下由外部指定入口模块:
+
+```
+npm run build -- --env entry=<name of module>
+npm run build:analysis -- --env entry=<name of module>
+```
+
+例子, 将 index 作为入口模块:
+
+```
+npm run build -- --env entry=index
+```
+
 ## 错误修复
 
 通过:
@@ -108,10 +121,12 @@ entrys 和 modules 下存放的都是用于 SPA 的入口模块, 对于页面组
 # 本地配置
 
 项目根路径支持两个特殊文件:
+
 - local.base.js
 - local.config.js
 
 这两个特殊文件会被 git 忽略掉, 但是一旦你提供它, 他的优先级会高于默认的:
+
 - build/base.js
 - config.js
 

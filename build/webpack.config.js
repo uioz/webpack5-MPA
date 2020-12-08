@@ -1,7 +1,7 @@
 /**
  * webpack 5 内置了多种优化所以省略了许多原来常见的配置, 这部分并不是遗漏.
  */
-const {
+let {
   base: { contextPath, projectEntry, publicPath, staticPath },
 } = require("./init");
 const { modules, pages } = require("./modules");
@@ -153,6 +153,9 @@ module.exports = async env => {
     }
     addPage(moduleName);
   }
+
+  // 优先使用外部指定的 entry
+  projectEntry = env.entry || projectEntry;
 
   if (projectEntry) {
     addPage(projectEntry, true);
