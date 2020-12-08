@@ -145,6 +145,7 @@ entrys 和 modules 下存放的都是用于 SPA 的入口模块, 对于页面组
   - [x] 自动化 dllplugin
   - [x] 构建时自动移除 htmlwebpackplugin 所注入的内容
 - [x] 移除 copyplugin 和 cleanplugin
+- [x] definePlugin 支持
 - [x] cache
 - [x] GZIP
 - [x] thread-loader
