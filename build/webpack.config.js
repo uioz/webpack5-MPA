@@ -7,6 +7,7 @@ let {
 const { modules, pages } = require("./modules");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const ThreadLoader = require("thread-loader");
@@ -67,6 +68,7 @@ const baseConfig = {
       chunks: "all",
     },
     runtimeChunk: "single",
+    minimizer: [new CssMinimizerPlugin()],
   },
   plugins: [
     new VueLoaderPlugin({
