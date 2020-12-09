@@ -40,8 +40,8 @@ exports.handleDevStyle = function handleDevStyle() {
 
 exports.handleProdStyle = function handleProdStyle() {
   return {
-    rule: {
-      test: /\.((c|sc)ss)$/i,
+    sassRule: {
+      test: /\.scss$/i,
       exclude: staticPath,
       use: [
         {
@@ -76,6 +76,36 @@ exports.handleProdStyle = function handleProdStyle() {
             },
           },
         },
+      ],
+    },
+    cssRule: {
+      test: /\.css$/i,
+      exclude: staticPath,
+      use: [
+        {
+          loader: miniCssExtractPlugin.loader,
+          options: {
+            publicPath,
+            esModule: false,
+          },
+        },
+        {
+          loader: "css-loader",
+          options: {
+            // don't handled url started with /static
+            url(url) {
+              if (`${url}/`.indexOf(`${staticPublicPath}/`) === 0) {
+                return false;
+              }
+              return true;
+            },
+            importLoaders: 1,
+            modules: false,
+            // see https://github.com/vuejs/vue-loader/issues/1709#issuecomment-674390048
+            esModule: false,
+          },
+        },
+        "postcss-loader",
       ],
     },
     plugin: new miniCssExtractPlugin({

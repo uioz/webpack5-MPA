@@ -68,7 +68,7 @@ const baseConfig = {
       chunks: "all",
     },
     runtimeChunk: "single",
-    minimizer: [new CssMinimizerPlugin()],
+    minimizer: [`...`, new CssMinimizerPlugin()],
   },
   plugins: [
     new VueLoaderPlugin({
@@ -82,8 +82,8 @@ module.exports = async env => {
 
   if (env.NODE_ENV === PROD_FLAG) {
     await initProd(pages);
-    const { rule, plugin } = handleProdStyle();
-    baseConfig.module.rules.unshift(rule);
+    const { cssRule, sassRule, plugin } = handleProdStyle();
+    baseConfig.module.rules.unshift(cssRule, sassRule);
     baseConfig.plugins.unshift(plugin);
     baseConfig.module.rules.unshift({
       test: /\.js$/,
