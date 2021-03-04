@@ -11,7 +11,7 @@ module.exports = async function createCompiler() {
   //   index:['webpack-hot-middleware/client','./index/modules/index.js']
   // }
   for (const item of Object.values(config.entry)) {
-    item.unshift("webpack-hot-middleware/client");
+    item.unshift("webpack-hot-middleware/client?noInfo=true");
   }
 
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
