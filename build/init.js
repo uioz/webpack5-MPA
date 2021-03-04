@@ -18,7 +18,6 @@ exports.runtimeConfig = fsExtra.existsSync(
 
 const vendorConfig = require("./webpack.vendor");
 const { devDebug, prodDebug } = require("./debug");
-const { contextPath } = require("./base");
 const DEV_FLAG = "development";
 const PROD_FLAG = "production";
 
@@ -68,14 +67,6 @@ exports.initProd = async function initProd(pages) {
           return src.lastIndexOf("vendor") + 6 != src.length;
         },
       });
-
-      if (exports.runtimeConfig) {
-        await fsExtra.copy(
-          path.resolve(contextPath, "local.config.js"),
-          path.resolve(distPath, "./static/js/config.js")
-        );
-      }
-
       prodDebug("copying static folder to distribution folder - done");
     })(),
   ];
@@ -101,4 +92,32 @@ exports.initProd = async function initProd(pages) {
   for (const task of tasks) {
     await task;
   }
+};
+
+/**
+ * 根据入口名称来读取处理好的环境变量
+ * @param {string} entry 入口名称
+ */
+exports.initEnv = function initEnv(entry) {
+  const env = {};
+
+  if (!base.globalEnv) {
+    return env;
+  }
+
+  if (base.globalEnv.default) {
+    merge(env, base.globalEnv.default);
+  }
+
+  if (base.globalEnv[entry]) {
+    merge(base.globalEnv[entry]);
+  }
+
+  let script = "";
+
+  for (const key of Object.keys(env)) {
+    script += `window.${key}=${JSON.stringify(env[key])};`;
+  }
+
+  return `<script>${script}</script>`;
 };

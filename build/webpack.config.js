@@ -11,7 +11,7 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const ThreadLoader = require("thread-loader");
-const { initProd } = require("./init");
+const { initProd, initEnv } = require("./init");
 const { DllReferencePlugin, DefinePlugin } = require("webpack");
 const { handleDevStyle, handleProdStyle } = require("./style");
 const { buildToolDebug } = require("./debug");
@@ -48,7 +48,10 @@ const baseConfig = {
     rules: [
       {
         test: /\.vue$/i,
-        include: [path.resolve(contextPath, "./src"), /vue-echarts/],
+        include: [
+          path.resolve(contextPath, "./src"),
+          path.resolve(contextPath, "./node_modules/vue-echarts"),
+        ],
         use: ["thread-loader", "vue-loader"],
       },
       {
@@ -77,7 +80,7 @@ const baseConfig = {
   ],
 };
 
-module.exports = async env => {
+module.exports = async (env) => {
   process.env.NODE_ENV = baseConfig.mode = env.NODE_ENV;
 
   if (env.NODE_ENV === PROD_FLAG) {
@@ -96,11 +99,10 @@ module.exports = async env => {
           },
         },
       ],
-
       include: path.resolve(contextPath, "src"),
       // see https://vue-loader.vuejs.org/guide/pre-processors.html#excluding-node-modules
       // see https://github.com/babel/babel-loader#some-files-in-my-node_modules-are-not-transpiled-for-ie-11
-      exclude: file => /node_modules/.test(file) && !/\.vue\.js/.test(file),
+      exclude: (file) => /node_modules/.test(file) && !/\.vue\.js/.test(file),
     });
     ThreadLoader.warmup({}, ["babel-loader", "vue-loader"]);
   }
@@ -129,6 +131,11 @@ module.exports = async env => {
     ThreadLoader.warmup({}, ["vue-loader"]);
   }
 
+  // 优先使用外部指定的 entry
+  projectEntry = env.entry || projectEntry;
+
+  const runtimeEnv = initEnv(projectEntry);
+
   function addPage(moduleName, index) {
     baseConfig.entry[index ? "index" : moduleName] = [
       `./src/${index ? "entrys" : "modules"}/${moduleName}/index.js`,
@@ -138,6 +145,7 @@ module.exports = async env => {
         filename: `${index ? "index" : moduleName}.html`,
         chunks: [index ? "index" : moduleName],
         publicPath,
+        runtimeEnv,
         headScripts:
           env.NODE_ENV === DEV_FLAG
             ? `<script src="/static/vendor/vendor.bundle.js"></script>`
@@ -155,9 +163,6 @@ module.exports = async env => {
     }
     addPage(moduleName);
   }
-
-  // 优先使用外部指定的 entry
-  projectEntry = env.entry || projectEntry;
 
   if (projectEntry) {
     addPage(projectEntry, true);
